@@ -1,17 +1,32 @@
-const express = require('express');
+const mongoose = require("mongoose");
+const express = require("express");
 const app = express();
-const port = 3000;
+
+console.log("MONGODB_URI: ",process.env.MONGODB_URI)
+
+const Register = require("./routes/registerRouter");
+const Event = require("./routes/eventsRouter")
+const PORT = 8000;
+
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-app.listen(port, (err) => {
-    if (err) {
-        return console.log('Something bad happened', err);
-    }
-    console.log(`Server is listening on ${port}`);
+app.use("/register",Register);
+
+app.use("/login",Register);
+
+app.use("/events",Event);
+// app.use("/events",Event);
+// app.use("/events",Event);
+// app.use("/events",Event);
+
+
+app.get("/",(req,res)=>{
+    return res.status(200).send({message:"success"})
 });
 
 
-
-module.exports = app;
+app.listen(PORT,()=>{
+    require("./models/database").connect();
+    console.log("server started successfully");
+});
